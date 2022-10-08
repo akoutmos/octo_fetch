@@ -104,17 +104,17 @@ defmodule GithubReleaseFetcher do
 
   The supported `opts` arguments are:
 
-  `override_version`          - By default, the latest version (as specified by the downloader module) will
-                                be downloaded. But you can also specify any additional versions that are also
-                                supported by the `:download_versions` map.
+  - `override_version`: By default, the latest version (as specified by the downloader module) will
+    be downloaded. But you can also specify any additional versions that are also supported by the
+    `:download_versions` map.
 
-  `override_operating_system` - By default, the operating system is dynamically deteremined based on
-                                the what the BEAM reports. If you would like to override those results,
-                                You can pass `:windows`, `:macos`, or `:linux`.
+  - `override_operating_system`: By default, the operating system is dynamically deteremined based on
+     the what the BEAM reports. If you would like to override those results, you can pass
+     `:windows`, `:macos`, or `:linux`.
 
-  `override_architecture`     - By default, the architecture is dynamically deteremined based on
-                                the what the BEAM reports. If you would like to override those results,
-                                You can pass `:amd64` or `:arm64`.
+  - `override_architecture`: By default, the architecture is dynamically deteremined based on
+    the what the BEAM reports. If you would like to override those results, you can pass `:amd64`
+    or `:arm64`.
   """
   @spec download(downloader_module :: module(), output_dir :: String.t(), opts :: Keyword.t()) ::
           GithubReleaseFetcher.Downloader.download_result()
