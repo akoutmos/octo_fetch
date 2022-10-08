@@ -1,6 +1,7 @@
 defmodule GithubReleaseFetcherTest do
   use ExUnit.Case
-  doctest GithubReleaseFetcher
+
+  import ExUnit.CaptureLog
 
   defmodule Litestream.Fetcher do
     use GithubReleaseFetcher,
@@ -28,5 +29,39 @@ defmodule GithubReleaseFetcherTest do
 
   test "Should download the specified version on the current platform" do
     GithubReleaseFetcher.Test.test_version_for_current_platform(Litestream.Fetcher, "0.3.9")
+  end
+
+  test "Should return an error if an invalid version is provided" do
+    capture_log(fn ->
+      assert {:error, "invalid is not a supported version"} =
+               Litestream.Fetcher.download(".", override_version: "invalid")
+    end) =~ "invalid is not a supported version"
+  end
+
+  test "Should return an error if an invalid output directory is provided" do
+    capture_log(fn ->
+      assert {:error, "Output directory ./this/dir/does/not/exist does not exist"} =
+               Litestream.Fetcher.download("./this/dir/does/not/exist")
+    end) =~ "Output directory ./this/dir/does/not/exist does not exist"
+  end
+
+  test "Should return an error if an invalid architecture is provided" do
+    capture_log(fn ->
+      assert {:error, "Your platform is not supported for the provided version"} =
+               Litestream.Fetcher.download(".", override_architecture: :bad_arch)
+    end) =~ "Your platform is not supported for the provided version"
+  end
+
+  test "Should return an error if an invalid OS is provided" do
+    capture_log(fn ->
+      assert {:error, "Your platform is not supported for the provided version"} =
+               Litestream.Fetcher.download(".", override_operating_system: :bad_os)
+    end) =~ "Your platform is not supported for the provided version"
+  end
+
+  @tag :tmp_dir
+  test "Should return an :ok tuple with the archive files", %{tmp_dir: tmp_dir} do
+    expected_output = Path.join(tmp_dir, "litestream")
+    assert {:ok, [^expected_output], []} = Litestream.Fetcher.download(tmp_dir)
   end
 end
