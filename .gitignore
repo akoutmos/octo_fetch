@@ -23,7 +23,7 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-github_release_fetcher-*.tar
+octo_fetch-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/

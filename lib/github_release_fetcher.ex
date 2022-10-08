@@ -1,4 +1,4 @@
-defmodule GithubReleaseFetcher do
+defmodule OctoFetch do
   @moduledoc """
   This library allows you to download release artifacts from GitHub. By using this library
   you get the following functionality for your GitHub downloader client:
@@ -16,7 +16,7 @@ defmodule GithubReleaseFetcher do
 
   ```elixir
   defmodule LiteStream.Downloader do
-    use GithubReleaseFetcher,
+    use OctoFetch,
       latest_version: "0.3.9",
       github_repo: "benbjohnson/litestream",
       download_versions: %{
@@ -47,15 +47,15 @@ defmodule GithubReleaseFetcher do
   ```
 
   If you are on an ARM based Mac, the above snippet won't work since Litestream does not currently
-  build ARM artifacts. But you can always override what GithubReleaseFetcher dynamically resolves
+  build ARM artifacts. But you can always override what OctoFetch dynamically resolves
   by doing the following:
 
   ```elixir
   Litestream.Downloader.download(".", override_architecture: :amd64)
   ```
 
-  Be sure to look at the `GithubReleaseFetcher.download/3` docs for supported options and
-  `GithubReleaseFetcher.Downloader` to see what behaviour callbacks you can override.
+  Be sure to look at the `OctoFetch.download/3` docs for supported options and
+  `OctoFetch.Downloader` to see what behaviour callbacks you can override.
   """
 
   require Logger
@@ -65,14 +65,14 @@ defmodule GithubReleaseFetcher do
     [:latest_version, :github_repo, :download_versions]
     |> Enum.each(fn key ->
       unless Keyword.has_key?(opts, key) do
-        raise "#{key} is a required option when calling `use GithubReleaseFetcher`"
+        raise "#{key} is a required option when calling `use OctoFetch`"
       end
     end)
 
     latest_version = Keyword.fetch!(opts, :latest_version)
 
     quote do
-      @behaviour GithubReleaseFetcher.Downloader
+      @behaviour OctoFetch.Downloader
 
       @impl true
       def base_url(github_repo, version) do
@@ -92,7 +92,7 @@ defmodule GithubReleaseFetcher do
       @impl true
       def download(output_dir, opts \\ []) do
         opts = Keyword.merge(unquote(opts), opts)
-        GithubReleaseFetcher.download(__MODULE__, output_dir, opts)
+        OctoFetch.download(__MODULE__, output_dir, opts)
       end
 
       @doc false
@@ -100,7 +100,7 @@ defmodule GithubReleaseFetcher do
         unquote(opts)
       end
 
-      defoverridable GithubReleaseFetcher.Downloader
+      defoverridable OctoFetch.Downloader
     end
   end
 
@@ -122,7 +122,7 @@ defmodule GithubReleaseFetcher do
     or `:arm64`.
   """
   @spec download(downloader_module :: module(), output_dir :: String.t(), opts :: Keyword.t()) ::
-          GithubReleaseFetcher.Downloader.download_result()
+          OctoFetch.Downloader.download_result()
   def download(downloader_module, output_dir, opts) do
     version_download_matrix = Keyword.fetch!(opts, :download_versions)
     github_repo = Keyword.fetch!(opts, :github_repo)
@@ -319,7 +319,7 @@ defmodule GithubReleaseFetcher do
 
         {os, arch, _wordsize} ->
           {:error,
-           "Open up an issue at https://github.com/akoutmos/github_release_fetcher as OS could not be derived for: os=#{inspect(os)}, arch=#{inspect(arch)}"}
+           "Open up an issue at https://github.com/akoutmos/octo_fetch as OS could not be derived for: os=#{inspect(os)}, arch=#{inspect(arch)}"}
       end
     end)
     |> case do
@@ -352,7 +352,7 @@ defmodule GithubReleaseFetcher do
 
         {os, arch, _wordsize} ->
           {:error,
-           "Open up an issue at https://github.com/akoutmos/github_release_fetcher as architecture could not be derived for: os=#{inspect(os)}, arch=#{inspect(arch)}"}
+           "Open up an issue at https://github.com/akoutmos/octo_fetch as architecture could not be derived for: os=#{inspect(os)}, arch=#{inspect(arch)}"}
       end
     end)
     |> case do

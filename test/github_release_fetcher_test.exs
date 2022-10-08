@@ -1,10 +1,10 @@
-defmodule GithubReleaseFetcherTest do
+defmodule OctoFetchTest do
   use ExUnit.Case
 
   import ExUnit.CaptureLog
 
   defmodule Litestream.Fetcher do
-    use GithubReleaseFetcher,
+    use OctoFetch,
       latest_version: "0.3.9",
       github_repo: "benbjohnson/litestream",
       download_versions: %{
@@ -24,11 +24,11 @@ defmodule GithubReleaseFetcherTest do
   end
 
   test "Should download all of the specified versions" do
-    GithubReleaseFetcher.Test.test_all_supported_downloads(Litestream.Fetcher)
+    OctoFetch.Test.test_all_supported_downloads(Litestream.Fetcher)
   end
 
   test "Should download the specified version on the current platform" do
-    GithubReleaseFetcher.Test.test_version_for_current_platform(Litestream.Fetcher, "0.3.9")
+    OctoFetch.Test.test_version_for_current_platform(Litestream.Fetcher, "0.3.9")
   end
 
   test "Should return an error if an invalid version is provided" do

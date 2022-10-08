@@ -1,9 +1,9 @@
-defmodule GithubReleaseFetcher.Downloader do
+defmodule OctoFetch.Downloader do
   @moduledoc """
   This module defines the callbacks that a GitHub downloader needs
   to implement in order to fetch artifacts from GitHub. `base_url/2` and
   `default_version/0` are automatically implemented for you when you use
-  the `GithubReleaseFetcher` module, but you always have the option to
+  the `OctoFetch` module, but you always have the option to
   override their default implementations.
   """
 
@@ -13,7 +13,7 @@ defmodule GithubReleaseFetcher.Downloader do
 
   @doc """
   This callback generates the base URL for the artifact based on the provided GitHub repo
-  and the requested version. The default implementation from `GithubReleaseFetcher` is:
+  and the requested version. The default implementation from `OctoFetch` is:
 
   ```elixir
   def base_url(github_repo, version) do
@@ -26,7 +26,7 @@ defmodule GithubReleaseFetcher.Downloader do
   @doc """
   This callback returns the default version that sould be downloaded if the
   user does not override the version. It will default to the value of `:latest_version`
-  as provided to the `GithubReleaseFetcher` `__using__/1` macro.
+  as provided to the `OctoFetch` `__using__/1` macro.
   """
   @callback default_version :: String.t()
 
@@ -45,8 +45,8 @@ defmodule GithubReleaseFetcher.Downloader do
               String.t()
 
   @doc """
-  This callback acts as a pass through to the `GithubReleaseFetcher` module for the
-  downloader implementation. See `GithubReleaseFetcher.download/3` for supported `opts`.
+  This callback acts as a pass through to the `OctoFetch` module for the
+  downloader implementation. See `OctoFetch.download/3` for supported `opts`.
   """
   @callback download(output_dir :: String.t(), opts :: Keyword.t()) :: download_result()
 end

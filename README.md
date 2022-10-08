@@ -1,6 +1,6 @@
 <!--START-->
 <p align="center">
-  <img align="center" width="33%" src="guides/images/logo.svg" alt="GithubReleaseFetcher Logo">
+  <img align="center" width="33%" src="guides/images/logo.svg" alt="OctoFetch Logo">
 </p>
 
 <p align="center">
@@ -8,21 +8,21 @@
 </p>
 
 <p align="center">
-  <a href="https://hex.pm/packages/github_release_fetcher">
-    <img alt="Hex.pm" src="https://img.shields.io/hexpm/v/github_release_fetcher?style=for-the-badge">
+  <a href="https://hex.pm/packages/octo_fetch">
+    <img alt="Hex.pm" src="https://img.shields.io/hexpm/v/octo_fetch?style=for-the-badge">
   </a>
 
-  <a href="https://github.com/akoutmos/github_release_fetcher/actions">
+  <a href="https://github.com/akoutmos/octo_fetch/actions">
     <img alt="GitHub Workflow Status (master)"
-    src="https://img.shields.io/github/workflow/status/akoutmos/github_release_fetcher/GithubReleaseFetcher%20CI/master?label=Build%20Status&style=for-the-badge">
+    src="https://img.shields.io/github/workflow/status/akoutmos/octo_fetch/OctoFetch%20CI/master?label=Build%20Status&style=for-the-badge">
   </a>
 
-  <a href="https://coveralls.io/github/akoutmos/github_release_fetcher?branch=master">
-    <img alt="Coveralls master branch" src="https://img.shields.io/coveralls/github/akoutmos/github_release_fetcher/master?style=for-the-badge">
+  <a href="https://coveralls.io/github/akoutmos/octo_fetch?branch=master">
+    <img alt="Coveralls master branch" src="https://img.shields.io/coveralls/github/akoutmos/octo_fetch/master?style=for-the-badge">
   </a>
 
   <a href="https://github.com/sponsors/akoutmos">
-    <img alt="Support GithubReleaseFetcher" src="https://img.shields.io/badge/Support%20the%20project-%E2%9D%A4-lightblue?style=for-the-badge">
+    <img alt="Support OctoFetch" src="https://img.shields.io/badge/Support%20the%20project-%E2%9D%A4-lightblue?style=for-the-badge">
   </a>
 </p>
 
@@ -32,26 +32,26 @@
 # Contents
 
 - [Installation](#installation)
-- [Supporting GithubReleaseFetcher](#supporting-githubreleasefetcher)
-- [Setting Up GithubReleaseFetcher](#setting-up-githubreleasefetcher)
+- [Supporting OctoFetch](#supporting-octofetch)
+- [Setting Up OctoFetch](#setting-up-octofetch)
 - [Attribution](#attribution)
 
 ## Installation
 
-[Available in Hex](https://hex.pm/packages/github_release_fetcher), the package can be installed by adding
-`github_release_fetcher` to your list of dependencies in `mix.exs`:
+[Available in Hex](https://hex.pm/packages/octo_fetch), the package can be installed by adding
+`octo_fetch` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:github_release_fetcher, "~> 0.0.1"}
+    {:octo_fetch, "~> 0.0.1"}
   ]
 end
 ```
 
-Documentation can be found at [https://hexdocs.pm/github_release_fetcher](https://hexdocs.pm/github_release_fetcher).
+Documentation can be found at [https://hexdocs.pm/octo_fetch](https://hexdocs.pm/octo_fetch).
 
-## Supporting GithubReleaseFetcher
+## Supporting OctoFetch
 
 If you rely on this library, it would much appreciated if you can give back to the project in order to help
 ensure its continued development.
@@ -74,7 +74,7 @@ ensure its continued development.
   <img align="center" height="125" src="guides/images/your_logo_here.png" alt="Support the project">
 </a>
 
-## Setting Up GithubReleaseFetcher
+## Setting Up OctoFetch
 
 If you want to create a downloader utility for a particular GitHub repository, you can use this library
 to take care of all of the boilerplate, validation, and archive extraction. For example, if you want to create
@@ -82,7 +82,7 @@ a downloader for Litestream, you can do the following:
 
 ```elixir
 defmodule LiteStream.Downloader do
-  use GithubReleaseFetcher,
+  use OctoFetch,
     latest_version: "0.3.9",
     github_repo: "benbjohnson/litestream",
     download_versions: %{

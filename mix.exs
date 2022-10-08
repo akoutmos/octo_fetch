@@ -1,14 +1,14 @@
-defmodule GithubReleaseFetcher.MixProject do
+defmodule OctoFetch.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :github_release_fetcher,
+      app: :octo_fetch,
       version: "0.1.0",
       elixir: "~> 1.13",
-      name: "GithubReleaseFetcher",
-      source_url: "https://github.com/akoutmos/github_release_fetcher",
-      homepage_url: "https://hex.pm/packages/github_release_fetcher",
+      name: "OctoFetch",
+      source_url: "https://github.com/akoutmos/octo_fetch",
+      homepage_url: "https://hex.pm/packages/octo_fetch",
       description: "Download, verify, and extract GitHub releases effortlessly right from Elixir",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -68,12 +68,12 @@ defmodule GithubReleaseFetcher.MixProject do
 
   defp package do
     [
-      name: "github_release_fetcher",
+      name: "octo_fetch",
       files: ~w(lib mix.exs README.md LICENSE CHANGELOG.md),
       licenses: ["MIT"],
       maintainers: ["Alex Koutmos"],
       links: %{
-        "GitHub" => "https://github.com/akoutmos/github_release_fetcher",
+        "GitHub" => "https://github.com/akoutmos/octo_fetch",
         "Sponsor" => "https://github.com/sponsors/akoutmos"
       }
     ]
