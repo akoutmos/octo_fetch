@@ -95,6 +95,11 @@ defmodule GithubReleaseFetcher do
         GithubReleaseFetcher.download(__MODULE__, output_dir, opts)
       end
 
+      @doc false
+      def init_opts do
+        unquote(opts)
+      end
+
       defoverridable GithubReleaseFetcher.Downloader
     end
   end
