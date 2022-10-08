@@ -1,0 +1,72 @@
+name: GithubReleaseFetcher CI
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  static_analysis:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: '1.14.0'
+          otp-version: '25.0'
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            deps
+            _build
+            priv/plts
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+      - name: Install dependencies
+        run: mix deps.get
+      - name: Mix Formatter
+        run: mix format --check-formatted
+      - name: Check for compiler warnings
+        run: mix compile --warnings-as-errors
+      - name: Credo strict checks
+        run: mix credo --strict
+      - name: Doctor documentation checks
+        run: mix doctor
+      - name: Dialyzer checks
+        run: mix dialyzer
+
+  unit_test:
+    name: Run ExUnit tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        elixir:
+          - '1.14'
+        otp:
+          - '25.0'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.otp }}
+      - name: Install dependencies
+        run: mix deps.get
+      - name: ExUnit tests
+        env:
+          MIX_ENV: test
+        run: mix coveralls.github
