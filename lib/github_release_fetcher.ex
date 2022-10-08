@@ -9,7 +9,10 @@ defmodule GithubReleaseFetcher do
   - Dynamic artifact downloading based on user's platform
   - Support only specific versions of artifacts from the provided repo
 
-  Sample usage:
+  ## Sample usage
+
+  If you want to make a downloader for the Litestream binary for example, you can define
+  a downloader module like so:
 
   ```elixir
   defmodule LiteStream.Downloader do
@@ -29,26 +32,30 @@ defmodule GithubReleaseFetcher do
         ]
       }
 
-    # This is automatically generated for you via the macro but you can override
-    # if the repo does not follow this pattern
+    # You must implement this function to generate the names of the downloads based on the
+    # user's current running environment
     @impl true
-    def base_url(github_repo, version) do
-      "https://github.com/\#{github_repo}/releases/download/v\#{version}/"
-    end
-
-    # This is automatically generated for you via the macro based on the
-    # `:latest_version` value but you can override
-    @impl true
-    def default_version do
-      "0.3.9"
-    end
-
-    # You must implement this function to generate the names of the downloads
-    @impl true
-    def download_name(version, :darwin, arch), do: "litestream-v\#{version}-darwin-\#{arch}.zip"
+    def download_name(version, :macos, arch), do: "litestream-v\#{version}-darwin-\#{arch}.zip"
     def download_name(version, :linux, arch), do: "litestream-v\#{version}-linux-\#{arch}.tar.gz"
   end
   ```
+
+  You would then be able to download the release artifact by doing the following:
+
+  ```elixir
+  Litestream.Downloader.download(".")
+  ```
+
+  If you are on an ARM based Mac, the above snippet won't work since Litestream does not currently
+  build ARM artifacts. But you can always override what GithubReleaseFetcher dynamically resolves
+  by doing the following:
+
+  ```elixir
+  Litestream.Downloader.download(".", override_architecture: :amd64)
+  ```
+
+  Be sure to look at the `GithubReleaseFetcher.download/3` docs for supported options and
+  `GithubReleaseFetcher.Downloader` to see what behaviour callbacks you can override.
   """
 
   require Logger
@@ -82,24 +89,7 @@ defmodule GithubReleaseFetcher do
         raise "#{__MODULE__} must implement the download_name/3 callback"
       end
 
-      @doc """
-      Download the GitHub release artifact and write it to the specified location. The second `opts`
-      argument supports the following values:
-
-      `override_version` - By default, the latest version (as specified by the downloader module) will
-                           be downloaded. But you can also specify any additional versions that are also
-                           supported by the `:download_versions` map.
-
-      `override_operating_system` - By default, the operating system is dynamically deteremined based on
-                                    the what the BEAM reports. If you would like to override those results,
-                                    You can pass `:windows`, `:macos`, or `:linux`.
-
-      `override_architecture` - By default, the architecture is dynamically deteremined based on
-                                the what the BEAM reports. If you would like to override those results,
-                                You can pass `:amd64` or `:arm64`.
-      """
-      @spec download(output_dir :: String.t(), opts :: Keyword.t()) ::
-              {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()}
+      @impl true
       def download(output_dir, opts \\ []) do
         opts = Keyword.merge(unquote(opts), opts)
         GithubReleaseFetcher.download(__MODULE__, output_dir, opts)
@@ -109,7 +99,25 @@ defmodule GithubReleaseFetcher do
     end
   end
 
-  @doc false
+  @doc """
+  Download the GitHub release artifact and write it to the specified location.
+
+  The supported `opts` arguments are:
+
+  `override_version`          - By default, the latest version (as specified by the downloader module) will
+                                be downloaded. But you can also specify any additional versions that are also
+                                supported by the `:download_versions` map.
+
+  `override_operating_system` - By default, the operating system is dynamically deteremined based on
+                                the what the BEAM reports. If you would like to override those results,
+                                You can pass `:windows`, `:macos`, or `:linux`.
+
+  `override_architecture`     - By default, the architecture is dynamically deteremined based on
+                                the what the BEAM reports. If you would like to override those results,
+                                You can pass `:amd64` or `:arm64`.
+
+  `filter_output_file` -
+  """
   def download(downloader_module, output_dir, opts) do
     version_download_matrix = Keyword.fetch!(opts, :download_versions)
     github_repo = Keyword.fetch!(opts, :github_repo)
