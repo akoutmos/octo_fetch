@@ -337,7 +337,7 @@ defmodule OctoFetch do
           :arm64
 
         {_os, arch, 64} when arch in ~w(amd64 x86_64) ->
-          :arm64
+          :amd64
 
         {os, arch, _wordsize} ->
           {:error,
