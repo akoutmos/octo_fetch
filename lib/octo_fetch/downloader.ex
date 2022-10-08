@@ -7,7 +7,7 @@ defmodule OctoFetch.Downloader do
   override their default implementations.
   """
 
-  @type os() :: :linux | :macos | :windows
+  @type os() :: :linux | :macos | :freebsd | :windows
   @type arch() :: :arm64 | :amd64
   @type download_result() :: {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()}
 

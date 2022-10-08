@@ -298,28 +298,22 @@ defmodule OctoFetch do
   defp get_platform_os(opts) do
     opts
     |> Keyword.get_lazy(:override_operating_system, fn ->
-      arch_str = :erlang.system_info(:system_architecture)
-      [arch | _] = arch_str |> List.to_string() |> String.split("-")
-
-      case {:os.type(), arch, :erlang.system_info(:wordsize) * 8} do
-        {{:win32, _}, _arch, 64} ->
+      case :os.type() do
+        {:win32, _} ->
           :windows
 
-        {{:unix, :darwin}, arch, 64} when arch in ~w(arm aarch64) ->
+        {:unix, :darwin} ->
           :macos
 
-        {{:unix, :darwin}, "x86_64", 64} ->
-          :macos
-
-        {{:unix, :linux}, "aarch64", 64} ->
+        {:unix, :linux} ->
           :linux
 
-        {{:unix, _osname}, arch, 64} when arch in ~w(x86_64 amd64) ->
-          :linux
+        {:unix, :freebsd} ->
+          :freebsd
 
-        {os, arch, _wordsize} ->
+        unknown_os ->
           {:error,
-           "Open up an issue at https://github.com/akoutmos/octo_fetch as OS could not be derived for: os=#{inspect(os)}, arch=#{inspect(arch)}"}
+           "Open up an issue at https://github.com/akoutmos/octo_fetch as OS could not be derived for: os=#{inspect(unknown_os)}"}
       end
     end)
     |> case do
@@ -338,17 +332,11 @@ defmodule OctoFetch do
         {{:win32, _}, _arch, 64} ->
           :amd64
 
-        {{:unix, :darwin}, arch, 64} when arch in ~w(arm aarch64) ->
+        {_os, arch, 64} when arch in ~w(arm aarch64) ->
           :arm64
 
-        {{:unix, :darwin}, "x86_64", 64} ->
-          :amd64
-
-        {{:unix, :linux}, "aarch64", 64} ->
+        {_os, arch, 64} when arch in ~w(amd64 x86_64) ->
           :arm64
-
-        {{:unix, _osname}, arch, 64} when arch in ~w(x86_64 amd64) ->
-          :amd64
 
         {os, arch, _wordsize} ->
           {:error,

@@ -44,7 +44,7 @@
 ```elixir
 def deps do
   [
-    {:octo_fetch, "~> 0.0.1"}
+    {:octo_fetch, "~> 0.2.0"}
   ]
 end
 ```
