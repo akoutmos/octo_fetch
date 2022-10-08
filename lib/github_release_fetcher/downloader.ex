@@ -9,6 +9,7 @@ defmodule GithubReleaseFetcher.Downloader do
 
   @type os() :: :linux | :macos | :windows
   @type arch() :: :arm64 | :amd64
+  @type download_result() :: {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()}
 
   @doc """
   This callback generates the base URL for the artifact based on the provided GitHub repo
@@ -16,7 +17,7 @@ defmodule GithubReleaseFetcher.Downloader do
 
   ```elixir
   def base_url(github_repo, version) do
-    "https://github.com/#{github_repo}/releases/download/v#{version}/"
+    "https://github.com/\#{github_repo}/releases/download/v\#{version}/"
   end
   ```
   """
@@ -47,6 +48,5 @@ defmodule GithubReleaseFetcher.Downloader do
   This callback acts as a pass through to the `GithubReleaseFetcher` module for the
   downloader implementation. See `GithubReleaseFetcher.download/3` for supported `opts`.
   """
-  @spec download(output_dir :: String.t(), opts :: Keyword.t()) ::
-          {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()}
+  @callback download(output_dir :: String.t(), opts :: Keyword.t()) :: download_result()
 end

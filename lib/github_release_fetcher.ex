@@ -115,9 +115,9 @@ defmodule GithubReleaseFetcher do
   `override_architecture`     - By default, the architecture is dynamically deteremined based on
                                 the what the BEAM reports. If you would like to override those results,
                                 You can pass `:amd64` or `:arm64`.
-
-  `filter_output_file` -
   """
+  @spec download(downloader_module :: module(), output_dir :: String.t(), opts :: Keyword.t()) ::
+          GithubReleaseFetcher.Downloader.download_result()
   def download(downloader_module, output_dir, opts) do
     version_download_matrix = Keyword.fetch!(opts, :download_versions)
     github_repo = Keyword.fetch!(opts, :github_repo)
