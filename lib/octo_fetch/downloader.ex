@@ -7,7 +7,7 @@ defmodule OctoFetch.Downloader do
   override their default implementations.
   """
 
-  @type os() :: :linux | :macos | :freebsd | :windows
+  @type os() :: :linux | :darwin | :freebsd | :windows
   @type arch() :: :arm64 | :amd64
   @type download_result() :: {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()}
 
@@ -37,7 +37,7 @@ defmodule OctoFetch.Downloader do
   so to ensure that users download the proper artifact:
 
   ```elixir
-  def download_name(version, :macos, arch), do: "litestream-v\#{version}-darwin-\#{arch}.zip"
+  def download_name(version, :darwin, arch), do: "litestream-v\#{version}-darwin-\#{arch}.zip"
   def download_name(version, :linux, arch), do: "litestream-v\#{version}-linux-\#{arch}.tar.gz"
   ```
   """

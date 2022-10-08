@@ -21,12 +21,12 @@ defmodule OctoFetch do
       github_repo: "benbjohnson/litestream",
       download_versions: %{
         "0.3.9" => [
-          {:macos, :amd64, "74599a34dc440c19544f533be2ef14cd4378ec1969b9b4fcfd24158946541869"},
+          {:darwin, :amd64, "74599a34dc440c19544f533be2ef14cd4378ec1969b9b4fcfd24158946541869"},
           {:linux, :amd64, "806e1cca4a2a105a36f219a4c212a220569d50a8f13f45f38ebe49e6699ab99f"},
           {:linux, :arm64, "61acea9d960633f6df514972688c47fa26979fbdb5b4e81ebc42f4904394c5c5"}
         ],
         "0.3.8" => [
-          {:macos, :amd64, "d359a4edd1cb98f59a1a7c787bbd0ed30c6cc3126b02deb05a0ca501ff94a46a"},
+          {:darwin, :amd64, "d359a4edd1cb98f59a1a7c787bbd0ed30c6cc3126b02deb05a0ca501ff94a46a"},
           {:linux, :amd64, "530723d95a51ee180e29b8eba9fee8ddafc80a01cab7965290fb6d6fc31381b3"},
           {:linux, :arm64, "1d6fb542c65b7b8bf91c8859d99f2f48b0b3251cc201341281f8f2c686dd81e2"}
         ]
@@ -35,7 +35,7 @@ defmodule OctoFetch do
     # You must implement this function to generate the names of the downloads based on the
     # user's current running environment
     @impl true
-    def download_name(version, :macos, arch), do: "litestream-v\#{version}-darwin-\#{arch}.zip"
+    def download_name(version, :darwin, arch), do: "litestream-v\#{version}-darwin-\#{arch}.zip"
     def download_name(version, :linux, arch), do: "litestream-v\#{version}-linux-\#{arch}.tar.gz"
   end
   ```
@@ -115,7 +115,7 @@ defmodule OctoFetch do
 
   - `override_operating_system`: By default, the operating system is dynamically deteremined based on
      the what the BEAM reports. If you would like to override those results, you can pass
-     `:windows`, `:macos`, or `:linux`.
+     `:windows`, `:darwin`, or `:linux`.
 
   - `override_architecture`: By default, the architecture is dynamically deteremined based on
     the what the BEAM reports. If you would like to override those results, you can pass `:amd64`
@@ -277,7 +277,8 @@ defmodule OctoFetch do
     end)
     |> case do
       nil ->
-        {:error, "Your platform is not supported for the provided version"}
+        {:error,
+         "Your platform is not supported for the provided version (os=#{operating_system}, architecture=#{architecture})"}
 
       sha ->
         {:ok, sha}
@@ -303,7 +304,7 @@ defmodule OctoFetch do
           :windows
 
         {:unix, :darwin} ->
-          :macos
+          :darwin
 
         {:unix, :linux} ->
           :linux
