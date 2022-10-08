@@ -47,16 +47,16 @@ defmodule OctoFetchTest do
 
   test "Should return an error if an invalid architecture is provided" do
     capture_log(fn ->
-      assert {:error, "Your platform is not supported for the provided version (os=darwin, architecture=bad_arch)"} =
+      assert {:error, "Your platform is not supported for the provided version" <> _} =
                Litestream.Fetcher.download(".", override_architecture: :bad_arch)
-    end) =~ "Your platform is not supported for the provided version (os=darwin, architecture=bad_arch)"
+    end) =~ "Your platform is not supported for the provided version"
   end
 
   test "Should return an error if an invalid OS is provided" do
     capture_log(fn ->
-      assert {:error, "Your platform is not supported for the provided version (os=bad_os, architecture=arm64)"} =
+      assert {:error, "Your platform is not supported for the provided version" <> _} =
                Litestream.Fetcher.download(".", override_operating_system: :bad_os)
-    end) =~ "Your platform is not supported for the provided version (os=bad_os, architecture=arm64)"
+    end) =~ "Your platform is not supported for the provided version"
   end
 
   @tag :tmp_dir
