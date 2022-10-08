@@ -4,7 +4,7 @@
 </p>
 
 <p align="center">
-  Download, verify, and extract GitHub releases effortlessly right from Elixir
+  Download, verify, and extract GitHub release artifacts effortlessly right from Elixir
 </p>
 
 <p align="center">

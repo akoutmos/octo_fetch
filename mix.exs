@@ -9,7 +9,7 @@ defmodule OctoFetch.MixProject do
       name: "OctoFetch",
       source_url: "https://github.com/akoutmos/octo_fetch",
       homepage_url: "https://hex.pm/packages/octo_fetch",
-      description: "Download, verify, and extract GitHub releases effortlessly right from Elixir",
+      description: "Download, verify, and extract GitHub release artifacts effortlessly right from Elixir",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
