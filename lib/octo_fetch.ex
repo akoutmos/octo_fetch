@@ -90,6 +90,11 @@ defmodule OctoFetch do
       end
 
       @impl true
+      def post_write_hook(_) do
+        :ok
+      end
+
+      @impl true
       def download(output_dir, opts \\ []) do
         opts = Keyword.merge(unquote(opts), opts)
         OctoFetch.download(__MODULE__, output_dir, opts)
@@ -154,6 +159,7 @@ defmodule OctoFetch do
 
           case File.write(file_write_path, file_contents) do
             :ok ->
+              downloader_module.post_write_hook(file_write_path)
               {[file_write_path | successful_acc], failed_acc}
 
             error ->

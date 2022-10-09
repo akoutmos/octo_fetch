@@ -45,6 +45,13 @@ defmodule OctoFetch.Downloader do
               String.t()
 
   @doc """
+  This callback is invoked whenever a file is written to the filesystem as
+  a result from the download. This callback may be invoked several times
+  if the download was an archive file and contained multiple files.
+  """
+  @callback post_write_hook(file :: String.t()) :: :ok
+
+  @doc """
   This callback acts as a pass through to the `OctoFetch` module for the
   downloader implementation. See `OctoFetch.download/3` for supported `opts`.
   """

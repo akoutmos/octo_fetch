@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for FreeBSD
+- `post_write_hook` callback that is invoked whenever a file is written
 
 ### Changed
 
