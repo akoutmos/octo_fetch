@@ -180,8 +180,8 @@ defmodule OctoFetch do
         Logger.warning("Failed to download release from GitHub. #{reason}")
         {:error, reason}
 
-      :skipped ->
-        :skipped
+      :skip ->
+        :skip
     end
   end
 

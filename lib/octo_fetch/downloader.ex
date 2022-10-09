@@ -9,7 +9,7 @@ defmodule OctoFetch.Downloader do
 
   @type os() :: :linux | :darwin | :freebsd | :windows
   @type arch() :: :arm64 | :amd64
-  @type download_result() :: {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()} | :skipped
+  @type download_result() :: {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()} | :skip
 
   @doc """
   This callback generates the base URL for the artifact based on the provided GitHub repo
