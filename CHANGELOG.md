@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for FreeBSD
 - `post_write_hook` callback that is invoked whenever a file is written
+- `pre_download_hook` callback that is invoked prior to starting a download
 
 ### Changed
 

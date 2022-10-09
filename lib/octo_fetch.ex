@@ -95,6 +95,11 @@ defmodule OctoFetch do
       end
 
       @impl true
+      def pre_download_hook(_, _) do
+        :cont
+      end
+
+      @impl true
       def download(output_dir, opts \\ []) do
         opts = Keyword.merge(unquote(opts), opts)
         OctoFetch.download(__MODULE__, output_dir, opts)
@@ -148,6 +153,7 @@ defmodule OctoFetch do
          {:ok, artifact_name} <-
            generate_artifact_name(downloader_module, version, operating_system, architecture),
          full_download_url <- Path.join(github_base_url, artifact_name),
+         :cont <- downloader_module.pre_download_hook(artifact_name, output_dir),
          {:ok, artifact_contents} <- download_artifact(full_download_url, opts),
          :ok <- verify_artifact_checksum(artifact_contents, sha_checksum, full_download_url),
          {:ok, files_to_write} <-
@@ -173,6 +179,9 @@ defmodule OctoFetch do
       {:error, reason} ->
         Logger.warning("Failed to download release from GitHub. #{reason}")
         {:error, reason}
+
+      :skipped ->
+        :skipped
     end
   end
 

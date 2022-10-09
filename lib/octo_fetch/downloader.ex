@@ -9,7 +9,7 @@ defmodule OctoFetch.Downloader do
 
   @type os() :: :linux | :darwin | :freebsd | :windows
   @type arch() :: :arm64 | :amd64
-  @type download_result() :: {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()}
+  @type download_result() :: {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()} | :skipped
 
   @doc """
   This callback generates the base URL for the artifact based on the provided GitHub repo
@@ -50,6 +50,13 @@ defmodule OctoFetch.Downloader do
   if the download was an archive file and contained multiple files.
   """
   @callback post_write_hook(file :: String.t()) :: :ok
+
+  @doc """
+  This callback is invoked prior to a file being downloaded. This gives you
+  the opportunity to skip the download if you so chose by returning `:skip`. Otherwise,
+  return `:cont` to continue with the download.
+  """
+  @callback pre_download_hook(file :: String.t(), output_dir :: String.t()) :: :cont | :skip
 
   @doc """
   This callback acts as a pass through to the `OctoFetch` module for the
