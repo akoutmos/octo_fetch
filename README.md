@@ -109,7 +109,7 @@ end
 You would then be able to download the release artifact by doing the following:
 
 ```elixir
-iex (1) > Litestream.Fetcher.download(".")
+iex (1) > Litestream.Downloader.download(".")
 {:ok, ["./litestream"], []}
 ```
 
