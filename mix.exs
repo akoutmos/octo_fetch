@@ -4,7 +4,7 @@ defmodule OctoFetch.MixProject do
   def project do
     [
       app: :octo_fetch,
-      version: "0.2.0",
+      version: "0.3.0",
       elixir: "~> 1.13",
       name: "OctoFetch",
       source_url: "https://github.com/akoutmos/octo_fetch",
