@@ -44,7 +44,7 @@ defmodule OctoFetch.MixProject do
   defp deps do
     [
       # Production dependencies
-      {:castore, "~> 0.1.18"},
+      {:castore, "~> 0.1 or ~> 1.0"},
 
       # Development dependencies
       {:ex_doc, "~> 0.28.2", only: :dev},
