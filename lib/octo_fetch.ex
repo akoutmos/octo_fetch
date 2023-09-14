@@ -163,12 +163,16 @@ defmodule OctoFetch do
         |> Enum.reduce({[], []}, fn {file_name, file_contents}, {successful_acc, failed_acc} ->
           file_write_path = Path.join(output_dir, file_name)
 
-          case File.write(file_write_path, file_contents) do
-            :ok ->
-              downloader_module.post_write_hook(file_write_path)
-              {[file_write_path | successful_acc], failed_acc}
+          with {:make_directory, :ok} <- Path.dirname(file_write_path) |> File.mkdir_p(),
+               {:write_file, :ok} <- File.write(file_write_path, file_contents) do
+            downloader_module.post_write_hook(file_write_path)
+            {[file_write_path | successful_acc], failed_acc}
+          else
+            {:make_directory, error} ->
+              Logger.warning("Failed to create directory for #{file_write_path}: #{inspect(error)}")
+              {successful_acc, [file_write_path | failed_acc]}
 
-            error ->
+            {:write_file, error} ->
               Logger.warning("Failed to extract #{file_write_path}: #{inspect(error)}")
               {successful_acc, [file_write_path | failed_acc]}
           end
