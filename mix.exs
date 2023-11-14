@@ -45,7 +45,7 @@ defmodule OctoFetch.MixProject do
     [
       # Production dependencies
       {:castore, "~> 0.1 or ~> 1.0"},
-      {:ssl_verify_fun, "~> 1.1", manager: :rebar3, override: true},
+      {:ssl_verify_fun, "~> 1.1"},
 
       # Development dependencies
       {:ex_doc, "~> 0.30.9", only: :dev},
