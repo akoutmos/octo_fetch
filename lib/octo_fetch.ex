@@ -162,9 +162,10 @@ defmodule OctoFetch do
         files_to_write
         |> Enum.reduce({[], []}, fn {file_name, file_contents}, {successful_acc, failed_acc} ->
           file_write_path = Path.join(output_dir, file_name)
+          file_write_dir = Path.dirname(file_write_path)
 
-          with {:make_directory, :ok} <- Path.dirname(file_write_path) |> File.mkdir_p(),
-               {:write_file, :ok} <- File.write(file_write_path, file_contents) do
+          with {:make_directory, :ok} <- {:make_directory, File.mkdir_p(file_write_dir)},
+               {:write_file, :ok} <- {:write_file, File.write(file_write_path, file_contents)} do
             downloader_module.post_write_hook(file_write_path)
             {[file_write_path | successful_acc], failed_acc}
           else

@@ -4,7 +4,7 @@ defmodule OctoFetch.MixProject do
   def project do
     [
       app: :octo_fetch,
-      version: "0.3.0",
+      version: "0.4.0",
       elixir: "~> 1.13",
       name: "OctoFetch",
       source_url: "https://github.com/akoutmos/octo_fetch",
@@ -45,12 +45,13 @@ defmodule OctoFetch.MixProject do
     [
       # Production dependencies
       {:castore, "~> 0.1 or ~> 1.0"},
+      {:ssl_verify_fun, "~> 1.1", manager: :rebar3, override: true},
 
       # Development dependencies
-      {:ex_doc, "~> 0.28.2", only: :dev},
-      {:excoveralls, "~> 0.15.0", only: :test, runtime: false},
-      {:credo, "~> 1.6.1", only: :dev},
-      {:dialyxir, "~> 1.2.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.30.9", only: :dev},
+      {:excoveralls, "~> 0.18.0", only: :test, runtime: false},
+      {:credo, "~> 1.7.1", only: :dev},
+      {:dialyxir, "~> 1.4.2", only: :dev, runtime: false},
       {:git_hooks, "~> 0.7.3", only: [:test, :dev], runtime: false}
     ]
   end
