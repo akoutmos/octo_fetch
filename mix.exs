@@ -13,13 +13,6 @@ defmodule OctoFetch.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
-        coveralls: :test,
-        "coveralls.detail": :test,
-        "coveralls.post": :test,
-        "coveralls.html": :test,
-        "coveralls.github": :test
-      ],
       dialyzer: [
         plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
       ],
@@ -40,6 +33,18 @@ defmodule OctoFetch.MixProject do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
+  def cli do
+    [
+      preferred_envs: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+        "coveralls.github": :test
+      ]
+    ]
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -48,11 +53,10 @@ defmodule OctoFetch.MixProject do
       {:ssl_verify_fun, "~> 1.1"},
 
       # Development dependencies
-      {:ex_doc, "~> 0.30.9", only: :dev},
-      {:excoveralls, "~> 0.18.0", only: :test, runtime: false},
-      {:credo, "~> 1.7.1", only: :dev},
-      {:dialyxir, "~> 1.4.2", only: :dev, runtime: false},
-      {:git_hooks, "~> 0.7.3", only: [:test, :dev], runtime: false}
+      {:ex_doc, "~> 0.40", only: :dev},
+      {:excoveralls, "~> 0.18", only: :test, runtime: false},
+      {:credo, "~> 1.7", only: :dev},
+      {:dialyxir, "~> 1.4", only: :dev, runtime: false}
     ]
   end
 

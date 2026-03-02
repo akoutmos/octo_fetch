@@ -185,6 +185,9 @@ defmodule OctoFetch do
         Logger.warning("Failed to download release from GitHub. #{reason}")
         {:error, reason}
 
+      {:skip, _metadata} = skip_tuple ->
+        skip_tuple
+
       :skip ->
         :skip
     end
