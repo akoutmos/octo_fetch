@@ -231,15 +231,18 @@ defmodule OctoFetch do
     {:ok, _} = Application.ensure_all_started(:inets)
     {:ok, _} = Application.ensure_all_started(:ssl)
 
-    if proxy = System.get_env("HTTP_PROXY") || System.get_env("http_proxy") do
-      Logger.debug("Using HTTP_PROXY: #{proxy}")
-      %{host: host, port: port} = URI.parse(proxy)
+    http_proxy = System.get_env("HTTP_PROXY") || System.get_env("http_proxy")
+    https_proxy = System.get_env("HTTPS_PROXY") || System.get_env("https_proxy")
+
+    if http_proxy do
+      Logger.debug("Using HTTP_PROXY: #{http_proxy}")
+      %{host: host, port: port} = URI.parse(http_proxy)
       :httpc.set_options([{:proxy, {{String.to_charlist(host), port}, []}}])
     end
 
-    if proxy = System.get_env("HTTPS_PROXY") || System.get_env("https_proxy") do
-      Logger.debug("Using HTTPS_PROXY: #{proxy}")
-      %{host: host, port: port} = URI.parse(proxy)
+    if https_proxy do
+      Logger.debug("Using HTTPS_PROXY: #{https_proxy}")
+      %{host: host, port: port} = URI.parse(https_proxy)
       :httpc.set_options([{:https_proxy, {{String.to_charlist(host), port}, []}}])
     end
 
