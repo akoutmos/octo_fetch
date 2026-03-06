@@ -9,7 +9,9 @@ defmodule OctoFetch.Downloader do
 
   @type os() :: :linux | :darwin | :freebsd | :windows
   @type arch() :: :arm64 | :amd64
-  @type download_result() :: {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()} | :skip
+  @type download_result() ::
+          {:ok, successful_files :: list(), failed_files :: list()} | {:error, String.t()} | :skip | {:skip, any()}
+  @type pre_download_hook_result() :: :cont | :skip | {:skip, any()}
 
   @doc """
   This callback generates the base URL for the artifact based on the provided GitHub repo
@@ -53,10 +55,14 @@ defmodule OctoFetch.Downloader do
 
   @doc """
   This callback is invoked prior to a file being downloaded. This gives you
-  the opportunity to skip the download if you so chose by returning `:skip`. Otherwise,
-  return `:cont` to continue with the download.
+  the opportunity to skip the download if you so chose by returning `:skip` or `{:skip, any()}`.
+  Otherwise, return `:cont` to continue with the download. If you return the `{:skip, any()}` typle,
+  you can use the second element in the tuple to provide your downstream consumers information about
+  why the download was skipped. The most obvious case for this is to skip downloading because the
+  file/directory already exists on disk and the `:skip` tuple can contain the absolute path to that
+  download.
   """
-  @callback pre_download_hook(file :: String.t(), output_dir :: String.t()) :: :cont | :skip
+  @callback pre_download_hook(file :: String.t(), output_dir :: String.t()) :: pre_download_hook_result()
 
   @doc """
   This callback acts as a pass through to the `OctoFetch` module for the
